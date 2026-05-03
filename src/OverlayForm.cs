@@ -7,6 +7,8 @@ namespace MicMute
 {
     public sealed class OverlayForm : Form
     {
+        private const int CornerRadius = 8;
+
         private readonly Label _title;
         private readonly Label _device;
         private readonly Timer _hideTimer;
@@ -18,32 +20,32 @@ namespace MicMute
             ShowInTaskbar = false;
             TopMost = true;
             StartPosition = FormStartPosition.Manual;
-            BackColor = Color.FromArgb(28, 31, 36);
+            BackColor = Color.FromArgb(24, 29, 36);
             ForeColor = Color.White;
             Opacity = 0.90;
-            Size = new Size(168, 52);
-            Padding = new Padding(8);
+            Size = new Size(204, 58);
+            Padding = new Padding(10);
 
             _glyph = new MicGlyphControl();
-            _glyph.Location = new Point(10, 11);
-            _glyph.Size = new Size(30, 30);
+            _glyph.Location = new Point(12, 13);
+            _glyph.Size = new Size(32, 32);
             Controls.Add(_glyph);
 
             _title = new Label();
             _title.AutoSize = false;
-            _title.Location = new Point(48, 7);
-            _title.Size = new Size(112, 21);
-            _title.Font = new Font("Malgun Gothic", 8.5f, FontStyle.Bold);
+            _title.Location = new Point(54, 8);
+            _title.Size = new Size(138, 23);
+            _title.Font = new Font("Segoe UI", 9.0f, FontStyle.Bold);
             _title.ForeColor = Color.White;
             _title.TextAlign = ContentAlignment.MiddleLeft;
             Controls.Add(_title);
 
             _device = new Label();
             _device.AutoSize = false;
-            _device.Location = new Point(49, 27);
-            _device.Size = new Size(108, 17);
-            _device.Font = new Font("Malgun Gothic", 7.0f, FontStyle.Regular);
-            _device.ForeColor = Color.FromArgb(210, 216, 225);
+            _device.Location = new Point(55, 31);
+            _device.Size = new Size(136, 18);
+            _device.Font = new Font("Segoe UI", 7.5f, FontStyle.Regular);
+            _device.ForeColor = Color.FromArgb(202, 210, 220);
             _device.TextAlign = ContentAlignment.MiddleLeft;
             Controls.Add(_device);
 
@@ -75,8 +77,8 @@ namespace MicMute
         public void ShowStatus(bool muted, string deviceName, OverlayPosition position, int opacityPercent)
         {
             _glyph.Muted = muted;
-            _title.Text = muted ? "마이크 음소거됨" : "마이크 켜짐";
-            _device.Text = Truncate(deviceName, 16);
+            _title.Text = muted ? "Microphone muted" : "Microphone live";
+            _device.Text = Truncate(deviceName, 22);
             Opacity = AppSettings.NormalizeOverlayOpacityPercent(opacityPercent) / 100.0;
             Place(position);
             _hideTimer.Stop();
@@ -89,9 +91,32 @@ namespace MicMute
         {
             base.OnPaint(e);
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            Rectangle bounds = new Rectangle(0, 0, Width - 1, Height - 1);
             using (Pen pen = new Pen(Color.FromArgb(70, 255, 255, 255), 1.0f))
+            using (GraphicsPath path = CreateRoundedPath(bounds, CornerRadius))
             {
-                e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
+                e.Graphics.DrawPath(pen, path);
+            }
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            if (Width <= 0 || Height <= 0)
+            {
+                return;
+            }
+
+            Region oldRegion = Region;
+            using (GraphicsPath path = CreateRoundedPath(new Rectangle(0, 0, Width, Height), CornerRadius))
+            {
+                Region = new Region(path);
+            }
+
+            if (oldRegion != null)
+            {
+                oldRegion.Dispose();
             }
         }
 
@@ -141,7 +166,7 @@ namespace MicMute
         {
             if (string.IsNullOrEmpty(value))
             {
-                return "기본 마이크";
+                return "Default microphone";
             }
 
             if (value.Length <= maxLength)
@@ -150,6 +175,18 @@ namespace MicMute
             }
 
             return value.Substring(0, maxLength - 1) + "...";
+        }
+
+        private static GraphicsPath CreateRoundedPath(Rectangle bounds, int radius)
+        {
+            int diameter = radius * 2;
+            GraphicsPath path = new GraphicsPath();
+            path.AddArc(bounds.Left, bounds.Top, diameter, diameter, 180, 90);
+            path.AddArc(bounds.Right - diameter, bounds.Top, diameter, diameter, 270, 90);
+            path.AddArc(bounds.Right - diameter, bounds.Bottom - diameter, diameter, diameter, 0, 90);
+            path.AddArc(bounds.Left, bounds.Bottom - diameter, diameter, diameter, 90, 90);
+            path.CloseFigure();
+            return path;
         }
 
         private sealed class MicGlyphControl : Control

@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MicMute
@@ -8,6 +10,10 @@ namespace MicMute
         [STAThread]
         private static void Main()
         {
+            CultureInfo english = CultureInfo.GetCultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = english;
+            Thread.CurrentThread.CurrentUICulture = english;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);

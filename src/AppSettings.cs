@@ -222,13 +222,13 @@ namespace MicMute
             switch (button)
             {
                 case MouseHotkeyButton.Middle:
-                    return "마우스 가운데 버튼";
+                    return "Mouse Middle Button";
                 case MouseHotkeyButton.XButton1:
-                    return "마우스 XButton1";
+                    return "Mouse XButton1";
                 case MouseHotkeyButton.XButton2:
-                    return "마우스 XButton2";
+                    return "Mouse XButton2";
                 default:
-                    return "마우스";
+                    return "Mouse";
             }
         }
     }

@@ -16,7 +16,7 @@ namespace MicMute
             {
                 if (key == null)
                 {
-                    throw new InvalidOperationException("Windows 시작 프로그램 레지스트리를 열 수 없습니다.");
+                    throw new InvalidOperationException("Could not open the Windows startup registry key.");
                 }
 
                 if (enabled)

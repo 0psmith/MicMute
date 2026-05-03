@@ -64,9 +64,9 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("MicMute")]
 [assembly: AssemblyDescription("Windows microphone mute controller")]
-[assembly: AssemblyCompany("foryou8033j")]
+[assembly: AssemblyCompany("0psmith")]
 [assembly: AssemblyProduct("MicMute")]
-[assembly: AssemblyCopyright("Copyright (c) 2026 foryou8033j")]
+[assembly: AssemblyCopyright("Copyright (c) 2026 0psmith")]
 [assembly: AssemblyVersion("$AssemblyVersion")]
 [assembly: AssemblyFileVersion("$AssemblyVersion")]
 [assembly: AssemblyInformationalVersion("$InformationalVersion")]

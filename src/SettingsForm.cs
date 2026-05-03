@@ -8,12 +8,12 @@ namespace MicMute
 {
     public sealed class SettingsForm : Form
     {
-        private static readonly Color WindowBackColor = Color.FromArgb(245, 247, 250);
+        private static readonly Color WindowBackColor = Color.FromArgb(246, 248, 251);
         private static readonly Color CardBackColor = Color.White;
-        private static readonly Color BorderColor = Color.FromArgb(224, 229, 237);
-        private static readonly Color PrimaryColor = Color.FromArgb(40, 135, 92);
-        private static readonly Color TextColor = Color.FromArgb(32, 38, 46);
-        private static readonly Color MutedTextColor = Color.FromArgb(105, 116, 130);
+        private static readonly Color BorderColor = Color.FromArgb(220, 226, 235);
+        private static readonly Color PrimaryColor = Color.FromArgb(33, 128, 96);
+        private static readonly Color TextColor = Color.FromArgb(30, 41, 59);
+        private static readonly Color MutedTextColor = Color.FromArgb(100, 116, 139);
 
         private readonly AudioEndpointController _audio;
         private AppSettings _settings;
@@ -52,11 +52,11 @@ namespace MicMute
 
         private void InitializeComponent()
         {
-            Text = "MicMute 설정";
+            Text = "MicMute Preferences";
             StartPosition = FormStartPosition.CenterScreen;
-            MinimumSize = new Size(760, 620);
-            Size = new Size(820, 680);
-            Font = new Font("Malgun Gothic", 9.0f, FontStyle.Regular);
+            MinimumSize = new Size(820, 610);
+            Size = new Size(880, 650);
+            Font = new Font("Segoe UI", 9.0f, FontStyle.Regular);
             BackColor = WindowBackColor;
             ForeColor = TextColor;
             FormBorderStyle = FormBorderStyle.Sizable;
@@ -67,70 +67,14 @@ namespace MicMute
             TableLayoutPanel root = new TableLayoutPanel();
             root.Dock = DockStyle.Fill;
             root.ColumnCount = 1;
-            root.RowCount = 3;
+            root.RowCount = 2;
             root.BackColor = WindowBackColor;
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 96));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 72));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 76));
             Controls.Add(root);
 
-            root.Controls.Add(CreateHeader(), 0, 0);
-            root.Controls.Add(CreateContent(), 0, 1);
-            root.Controls.Add(CreateFooter(), 0, 2);
-        }
-
-        private Control CreateHeader()
-        {
-            Panel header = new Panel();
-            header.Dock = DockStyle.Fill;
-            header.BackColor = WindowBackColor;
-            header.Padding = new Padding(28, 22, 28, 12);
-
-            TableLayoutPanel layout = new TableLayoutPanel();
-            layout.Dock = DockStyle.Fill;
-            layout.ColumnCount = 2;
-            layout.RowCount = 1;
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
-            header.Controls.Add(layout);
-
-            TableLayoutPanel titleBlock = new TableLayoutPanel();
-            titleBlock.Dock = DockStyle.Fill;
-            titleBlock.ColumnCount = 1;
-            titleBlock.RowCount = 2;
-            titleBlock.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
-            titleBlock.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
-            layout.Controls.Add(titleBlock, 0, 0);
-
-            Label title = new Label();
-            title.Text = "MicMute";
-            title.Dock = DockStyle.Fill;
-            title.Font = new Font("Malgun Gothic", 18.0f, FontStyle.Bold);
-            title.ForeColor = TextColor;
-            title.TextAlign = ContentAlignment.MiddleLeft;
-            titleBlock.Controls.Add(title, 0, 0);
-
-            Label subtitle = new Label();
-            subtitle.Text = "마이크 음소거, 단축키, 오버레이 동작을 조정합니다.";
-            subtitle.Dock = DockStyle.Fill;
-            subtitle.Font = new Font("Malgun Gothic", 9.0f, FontStyle.Regular);
-            subtitle.ForeColor = MutedTextColor;
-            subtitle.TextAlign = ContentAlignment.MiddleLeft;
-            titleBlock.Controls.Add(subtitle, 0, 1);
-
-            Label badge = new Label();
-            badge.Text = "설정";
-            badge.Dock = DockStyle.None;
-            badge.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            badge.Size = new Size(112, 30);
-            badge.Margin = new Padding(0, 6, 0, 0);
-            badge.BackColor = Color.FromArgb(225, 244, 236);
-            badge.ForeColor = PrimaryColor;
-            badge.Font = new Font("Malgun Gothic", 9.0f, FontStyle.Bold);
-            badge.TextAlign = ContentAlignment.MiddleCenter;
-            layout.Controls.Add(badge, 1, 0);
-
-            return header;
+            root.Controls.Add(CreateContent(), 0, 0);
+            root.Controls.Add(CreateFooter(), 0, 1);
         }
 
         private Control CreateContent()
@@ -138,7 +82,7 @@ namespace MicMute
             Panel shell = new Panel();
             shell.Dock = DockStyle.Fill;
             shell.BackColor = WindowBackColor;
-            shell.Padding = new Padding(28, 0, 28, 0);
+            shell.Padding = new Padding(28, 24, 28, 0);
 
             TableLayoutPanel content = new TableLayoutPanel();
             content.Dock = DockStyle.Fill;
@@ -147,7 +91,7 @@ namespace MicMute
             content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
             content.RowStyles.Add(new RowStyle(SizeType.Absolute, 150));
-            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 154));
+            content.RowStyles.Add(new RowStyle(SizeType.Absolute, 158));
             content.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             shell.Controls.Add(content);
 
@@ -169,12 +113,12 @@ namespace MicMute
         {
             RoundedPanel card = CreateCard();
             TableLayoutPanel layout = CreateCardLayout(3);
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             card.Controls.Add(layout);
 
-            layout.Controls.Add(CreateSectionTitle("마이크", "음소거를 제어할 입력 장치를 선택합니다."), 0, 0);
+            layout.Controls.Add(CreateSectionTitle("Microphone", "Select the input device to control."), 0, 0);
 
             TableLayoutPanel row = new TableLayoutPanel();
             row.Dock = DockStyle.Fill;
@@ -187,17 +131,17 @@ namespace MicMute
             _deviceCombo = new ComboBox();
             _deviceCombo.DropDownStyle = ComboBoxStyle.DropDownList;
             _deviceCombo.Dock = DockStyle.Fill;
-            _deviceCombo.Font = new Font("Malgun Gothic", 9.0f, FontStyle.Regular);
+            _deviceCombo.Font = new Font("Segoe UI", 9.0f, FontStyle.Regular);
             row.Controls.Add(_deviceCombo, 0, 0);
 
-            Button refresh = CreateSecondaryButton("새로 고침");
+            Button refresh = CreateSecondaryButton("Refresh");
             refresh.Dock = DockStyle.Fill;
             refresh.Click += delegate { PopulateDevices(GetSelectedDeviceId()); };
             row.Controls.Add(refresh, 1, 0);
 
             layout.Controls.Add(row, 0, 1);
 
-            _deviceHintLabel = CreateHintLabel("Windows 기본 마이크를 선택하면 현재 기본 입력 장치를 따라갑니다.");
+            _deviceHintLabel = CreateHintLabel("Use Windows default to follow the current input device.");
             layout.Controls.Add(_deviceHintLabel, 0, 2);
 
             return card;
@@ -207,12 +151,12 @@ namespace MicMute
         {
             RoundedPanel card = CreateCard();
             TableLayoutPanel layout = CreateCardLayout(3);
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
             layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 32));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 36));
             card.Controls.Add(layout);
 
-            layout.Controls.Add(CreateSectionTitle("단축키", "키보드 조합이나 마우스 특수 버튼으로 음소거를 전환합니다."), 0, 0);
+            layout.Controls.Add(CreateSectionTitle("Hotkey", "Use a keyboard shortcut or mouse button."), 0, 0);
 
             TableLayoutPanel row = new TableLayoutPanel();
             row.Dock = DockStyle.Fill;
@@ -227,18 +171,18 @@ namespace MicMute
             _hotkeyValueLabel.BackColor = Color.FromArgb(248, 250, 252);
             _hotkeyValueLabel.BorderStyle = BorderStyle.FixedSingle;
             _hotkeyValueLabel.ForeColor = TextColor;
-            _hotkeyValueLabel.Font = new Font("Malgun Gothic", 10.0f, FontStyle.Bold);
+            _hotkeyValueLabel.Font = new Font("Segoe UI", 10.0f, FontStyle.Bold);
             _hotkeyValueLabel.Padding = new Padding(12, 0, 12, 0);
             _hotkeyValueLabel.TextAlign = ContentAlignment.MiddleLeft;
             row.Controls.Add(_hotkeyValueLabel, 0, 0);
 
-            Button record = CreatePrimaryButton("기록");
+            Button record = CreatePrimaryButton("Record");
             record.Dock = DockStyle.Fill;
             record.Click += delegate { RecordHotkey(); };
             row.Controls.Add(record, 1, 0);
 
             layout.Controls.Add(row, 0, 1);
-            layout.Controls.Add(CreateHintLabel("기록을 누른 뒤 사용할 키 조합, 마우스 가운데 버튼, XButton1, XButton2를 누르세요."), 0, 2);
+            layout.Controls.Add(CreateHintLabel("Press Record, then press a key combo or supported mouse button."), 0, 2);
 
             return card;
         }
@@ -249,21 +193,21 @@ namespace MicMute
             card.Margin = new Padding(0, 8, 8, 0);
 
             TableLayoutPanel layout = CreateCardLayout(4);
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
             layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             card.Controls.Add(layout);
 
-            layout.Controls.Add(CreateSectionTitle("동작", "앱 종료와 Windows 시작 동작을 설정합니다."), 0, 0);
+            layout.Controls.Add(CreateSectionTitle("Behavior", "Close and startup preferences."), 0, 0);
 
-            _closeToTrayCheck = CreateCheckBox("창 닫기 시 트레이로 이동");
+            _closeToTrayCheck = CreateCheckBox("Close to tray");
             layout.Controls.Add(_closeToTrayCheck, 0, 1);
 
-            _startWithWindowsCheck = CreateCheckBox("Windows 시작 시 자동 실행");
+            _startWithWindowsCheck = CreateCheckBox("Start with Windows");
             layout.Controls.Add(_startWithWindowsCheck, 0, 2);
 
-            layout.Controls.Add(CreateHintLabel("자동 실행은 현재 사용자 계정의 시작 프로그램에 등록됩니다."), 0, 3);
+            layout.Controls.Add(CreateHintLabel("Startup is registered for this Windows user."), 0, 3);
             return card;
         }
 
@@ -273,29 +217,29 @@ namespace MicMute
             card.Margin = new Padding(8, 8, 0, 0);
 
             TableLayoutPanel layout = CreateCardLayout(5);
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 44));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 28));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 38));
-            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 42));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 36));
+            layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
             layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
             card.Controls.Add(layout);
 
-            layout.Controls.Add(CreateSectionTitle("오버레이", "음소거 전환 시 표시되는 작은 알림을 조정합니다."), 0, 0);
+            layout.Controls.Add(CreateSectionTitle("Overlay", "Compact mute status notification."), 0, 0);
 
-            Label positionLabel = CreateFieldLabel("위치");
+            Label positionLabel = CreateFieldLabel("Position");
             layout.Controls.Add(positionLabel, 0, 1);
 
             _overlayCombo = new ComboBox();
             _overlayCombo.DropDownStyle = ComboBoxStyle.DropDownList;
             _overlayCombo.Dock = DockStyle.Fill;
-            _overlayCombo.Font = new Font("Malgun Gothic", 9.0f, FontStyle.Regular);
-            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.TopLeft, "왼쪽 위"));
-            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.TopCenter, "위쪽 가운데"));
-            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.TopRight, "오른쪽 위"));
-            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.Center, "가운데"));
-            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.BottomLeft, "왼쪽 아래"));
-            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.BottomCenter, "아래쪽 가운데"));
-            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.BottomRight, "오른쪽 아래"));
+            _overlayCombo.Font = new Font("Segoe UI", 9.0f, FontStyle.Regular);
+            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.TopLeft, "Top left"));
+            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.TopCenter, "Top center"));
+            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.TopRight, "Top right"));
+            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.Center, "Center"));
+            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.BottomLeft, "Bottom left"));
+            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.BottomCenter, "Bottom center"));
+            _overlayCombo.Items.Add(new EnumComboItem(OverlayPosition.BottomRight, "Bottom right"));
             layout.Controls.Add(_overlayCombo, 0, 2);
 
             TableLayoutPanel opacityHeader = new TableLayoutPanel();
@@ -305,7 +249,7 @@ namespace MicMute
             opacityHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
             opacityHeader.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 64));
 
-            opacityHeader.Controls.Add(CreateFieldLabel("투명도"), 0, 0);
+            opacityHeader.Controls.Add(CreateFieldLabel("Opacity"), 0, 0);
             _overlayOpacityValueLabel = CreateFieldLabel("90%");
             _overlayOpacityValueLabel.TextAlign = ContentAlignment.MiddleRight;
             opacityHeader.Controls.Add(_overlayOpacityValueLabel, 1, 0);
@@ -340,7 +284,7 @@ namespace MicMute
             buttons.AutoSize = true;
             footer.Controls.Add(buttons);
 
-            Button ok = CreatePrimaryButton("확인");
+            Button ok = CreatePrimaryButton("OK");
             ok.Width = 92;
             ok.Click += delegate
             {
@@ -350,11 +294,11 @@ namespace MicMute
                 }
             };
 
-            Button cancel = CreateSecondaryButton("취소");
+            Button cancel = CreateSecondaryButton("Cancel");
             cancel.Width = 92;
             cancel.Click += delegate { Hide(); };
 
-            Button apply = CreateSecondaryButton("적용");
+            Button apply = CreateSecondaryButton("Apply");
             apply.Width = 92;
             apply.Click += delegate { TryApply(); };
 
@@ -373,9 +317,9 @@ namespace MicMute
             card.Dock = DockStyle.Fill;
             card.BackColor = CardBackColor;
             card.BorderColor = BorderColor;
-            card.Radius = 10;
-            card.Padding = new Padding(18, 16, 18, 16);
-            card.Margin = new Padding(0, 0, 0, 8);
+            card.Radius = 8;
+            card.Padding = new Padding(18, 10, 18, 10);
+            card.Margin = new Padding(0, 0, 0, 10);
             return card;
         }
 
@@ -397,13 +341,13 @@ namespace MicMute
             block.ColumnCount = 1;
             block.RowCount = 2;
             block.Margin = Padding.Empty;
-            block.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
-            block.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
+            block.RowStyles.Add(new RowStyle(SizeType.Absolute, 22));
+            block.RowStyles.Add(new RowStyle(SizeType.Absolute, 20));
 
             Label title = new Label();
             title.Text = titleText;
             title.Dock = DockStyle.Fill;
-            title.Font = new Font("Malgun Gothic", 10.0f, FontStyle.Bold);
+            title.Font = new Font("Segoe UI", 10.0f, FontStyle.Bold);
             title.ForeColor = TextColor;
             title.TextAlign = ContentAlignment.MiddleLeft;
             block.Controls.Add(title, 0, 0);
@@ -411,7 +355,7 @@ namespace MicMute
             Label subtitle = new Label();
             subtitle.Text = subtitleText;
             subtitle.Dock = DockStyle.Fill;
-            subtitle.Font = new Font("Malgun Gothic", 8.2f, FontStyle.Regular);
+            subtitle.Font = new Font("Segoe UI", 8.4f, FontStyle.Regular);
             subtitle.ForeColor = MutedTextColor;
             subtitle.TextAlign = ContentAlignment.MiddleLeft;
             subtitle.AutoEllipsis = true;
@@ -425,7 +369,7 @@ namespace MicMute
             Label label = new Label();
             label.Text = text;
             label.Dock = DockStyle.Fill;
-            label.Font = new Font("Malgun Gothic", 8.0f, FontStyle.Regular);
+            label.Font = new Font("Segoe UI", 8.0f, FontStyle.Regular);
             label.ForeColor = MutedTextColor;
             label.TextAlign = ContentAlignment.MiddleLeft;
             label.AutoEllipsis = true;
@@ -437,7 +381,7 @@ namespace MicMute
             Label label = new Label();
             label.Text = text;
             label.Dock = DockStyle.Fill;
-            label.Font = new Font("Malgun Gothic", 8.7f, FontStyle.Bold);
+            label.Font = new Font("Segoe UI", 8.7f, FontStyle.Bold);
             label.ForeColor = MutedTextColor;
             label.TextAlign = ContentAlignment.MiddleLeft;
             return label;
@@ -448,7 +392,7 @@ namespace MicMute
             CheckBox checkBox = new CheckBox();
             checkBox.Text = text;
             checkBox.Dock = DockStyle.Fill;
-            checkBox.Font = new Font("Malgun Gothic", 9.2f, FontStyle.Regular);
+            checkBox.Font = new Font("Segoe UI", 9.2f, FontStyle.Regular);
             checkBox.ForeColor = TextColor;
             checkBox.AutoSize = false;
             checkBox.Padding = new Padding(0, 6, 0, 0);
@@ -461,8 +405,8 @@ namespace MicMute
             button.BackColor = PrimaryColor;
             button.ForeColor = Color.White;
             button.FlatAppearance.BorderColor = PrimaryColor;
-            button.FlatAppearance.MouseOverBackColor = Color.FromArgb(48, 154, 107);
-            button.FlatAppearance.MouseDownBackColor = Color.FromArgb(31, 111, 75);
+            button.FlatAppearance.MouseOverBackColor = Color.FromArgb(42, 148, 112);
+            button.FlatAppearance.MouseDownBackColor = Color.FromArgb(25, 104, 78);
             return button;
         }
 
@@ -486,7 +430,7 @@ namespace MicMute
             button.Margin = new Padding(8, 0, 0, 0);
             button.FlatStyle = FlatStyle.Flat;
             button.FlatAppearance.BorderSize = 1;
-            button.Font = new Font("Malgun Gothic", 9.0f, FontStyle.Bold);
+            button.Font = new Font("Segoe UI", 9.0f, FontStyle.Bold);
             button.UseVisualStyleBackColor = false;
             return button;
         }
@@ -512,7 +456,7 @@ namespace MicMute
 
             _deviceCombo.BeginUpdate();
             _deviceCombo.Items.Clear();
-            _deviceCombo.Items.Add(new DeviceComboItem(string.Empty, "Windows 기본 마이크"));
+            _deviceCombo.Items.Add(new DeviceComboItem(string.Empty, "Windows default microphone"));
 
             List<AudioDeviceInfo> devices = new List<AudioDeviceInfo>();
             bool failed = false;
@@ -539,7 +483,7 @@ namespace MicMute
 
             if (!found)
             {
-                _deviceCombo.Items.Add(new DeviceComboItem(selectedDeviceId, "사용할 수 없는 마이크"));
+                _deviceCombo.Items.Add(new DeviceComboItem(selectedDeviceId, "Unavailable microphone"));
             }
 
             for (int i = 0; i < _deviceCombo.Items.Count; i++)
@@ -562,8 +506,8 @@ namespace MicMute
             if (_deviceHintLabel != null)
             {
                 _deviceHintLabel.Text = failed
-                    ? "장치 목록을 읽을 수 없습니다. 기본 마이크는 계속 사용할 수 있습니다."
-                    : "Windows 기본 마이크를 선택하면 현재 기본 입력 장치를 따라갑니다.";
+                    ? "Could not read the device list. The default microphone can still be used."
+                    : "Use Windows default to follow the current input device.";
             }
         }
 
@@ -600,7 +544,7 @@ namespace MicMute
             AppSettings candidate = BuildSettingsFromControls();
             if (candidate.Hotkey == null || !candidate.Hotkey.IsValid())
             {
-                MessageBox.Show(this, "사용할 단축키를 기록하세요.", "MicMute", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Record a hotkey to use.", "MicMute", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
@@ -645,7 +589,7 @@ namespace MicMute
                 return;
             }
 
-            _hotkeyValueLabel.Text = _currentHotkey == null ? "설정되지 않음" : _currentHotkey.ToDisplayString();
+            _hotkeyValueLabel.Text = _currentHotkey == null ? "Not set" : _currentHotkey.ToDisplayString();
         }
 
         private void UpdateOpacityLabel()
@@ -666,7 +610,7 @@ namespace MicMute
             public DeviceComboItem(string id, string name)
             {
                 Id = id ?? string.Empty;
-                _name = name ?? "마이크";
+                _name = name ?? "Microphone";
             }
 
             public override string ToString()
@@ -699,8 +643,8 @@ namespace MicMute
 
             public RoundedPanel()
             {
-                Radius = 10;
-                BorderColor = Color.FromArgb(224, 229, 237);
+                Radius = 8;
+                BorderColor = Color.FromArgb(220, 226, 235);
                 SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
             }
 

@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -19,12 +18,12 @@ namespace MicMute
         private const int XBUTTON1 = 0x0001;
         private const int XBUTTON2 = 0x0002;
 
-        private static readonly Color WindowBackColor = Color.FromArgb(245, 247, 250);
+        private static readonly Color WindowBackColor = Color.FromArgb(246, 248, 251);
         private static readonly Color CardBackColor = Color.White;
-        private static readonly Color BorderColor = Color.FromArgb(224, 229, 237);
-        private static readonly Color PrimaryColor = Color.FromArgb(40, 135, 92);
-        private static readonly Color TextColor = Color.FromArgb(32, 38, 46);
-        private static readonly Color MutedTextColor = Color.FromArgb(105, 116, 130);
+        private static readonly Color BorderColor = Color.FromArgb(220, 226, 235);
+        private static readonly Color PrimaryColor = Color.FromArgb(33, 128, 96);
+        private static readonly Color TextColor = Color.FromArgb(30, 41, 59);
+        private static readonly Color MutedTextColor = Color.FromArgb(100, 116, 139);
 
         private readonly LowLevelKeyboardProc _keyboardProc;
         private readonly LowLevelMouseProc _mouseProc;
@@ -45,27 +44,27 @@ namespace MicMute
 
         private void InitializeComponent(HotkeyGesture current)
         {
-            Text = "단축키 기록";
+            Text = "Record hotkey";
             StartPosition = FormStartPosition.CenterParent;
-            Size = new Size(540, 280);
-            MinimumSize = new Size(540, 280);
+            Size = new Size(540, 300);
+            MinimumSize = new Size(540, 300);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             MinimizeBox = false;
             ShowInTaskbar = false;
-            Font = new Font("Malgun Gothic", 9.0f, FontStyle.Regular);
+            Font = new Font("Segoe UI", 9.0f, FontStyle.Regular);
             BackColor = WindowBackColor;
             ForeColor = TextColor;
             AutoScaleMode = AutoScaleMode.Dpi;
 
             TableLayoutPanel root = new TableLayoutPanel();
             root.Dock = DockStyle.Fill;
-            root.Padding = new Padding(22);
+            root.Padding = new Padding(24, 22, 24, 18);
             root.ColumnCount = 1;
             root.RowCount = 3;
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 58));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 56));
             root.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 46));
+            root.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
             Controls.Add(root);
 
             TableLayoutPanel header = new TableLayoutPanel();
@@ -77,76 +76,68 @@ namespace MicMute
             root.Controls.Add(header, 0, 0);
 
             Label title = new Label();
-            title.Text = "단축키 기록";
+            title.Text = "Record hotkey";
             title.Dock = DockStyle.Fill;
-            title.Font = new Font("Malgun Gothic", 14.0f, FontStyle.Bold);
+            title.Font = new Font("Segoe UI", 14.5f, FontStyle.Bold);
             title.ForeColor = TextColor;
             title.TextAlign = ContentAlignment.MiddleLeft;
             header.Controls.Add(title, 0, 0);
 
             Label subtitle = new Label();
-            subtitle.Text = "사용할 키 조합이나 마우스 특수 버튼을 누르면 바로 저장됩니다.";
+            subtitle.Text = "Press a key combination or supported mouse button to save it.";
             subtitle.Dock = DockStyle.Fill;
-            subtitle.Font = new Font("Malgun Gothic", 8.5f, FontStyle.Regular);
+            subtitle.Font = new Font("Segoe UI", 8.7f, FontStyle.Regular);
             subtitle.ForeColor = MutedTextColor;
             subtitle.TextAlign = ContentAlignment.MiddleLeft;
             header.Controls.Add(subtitle, 0, 1);
 
-            RoundedPanel card = new RoundedPanel();
-            card.Dock = DockStyle.Fill;
-            card.BackColor = CardBackColor;
-            card.BorderColor = BorderColor;
-            card.Radius = 10;
-            card.Padding = new Padding(18, 16, 18, 16);
-            root.Controls.Add(card, 0, 1);
-
-            TableLayoutPanel cardLayout = new TableLayoutPanel();
-            cardLayout.Dock = DockStyle.Fill;
-            cardLayout.ColumnCount = 1;
-            cardLayout.RowCount = 3;
-            cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
-            cardLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 52));
-            cardLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-            card.Controls.Add(cardLayout);
+            TableLayoutPanel inputLayout = new TableLayoutPanel();
+            inputLayout.Dock = DockStyle.Fill;
+            inputLayout.ColumnCount = 1;
+            inputLayout.RowCount = 3;
+            inputLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 24));
+            inputLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 52));
+            inputLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            root.Controls.Add(inputLayout, 0, 1);
 
             Label prompt = new Label();
-            prompt.Text = "입력 대기 중";
+            prompt.Text = "Waiting for input";
             prompt.Dock = DockStyle.Fill;
-            prompt.Font = new Font("Malgun Gothic", 9.0f, FontStyle.Bold);
+            prompt.Font = new Font("Segoe UI", 9.0f, FontStyle.Bold);
             prompt.ForeColor = PrimaryColor;
             prompt.TextAlign = ContentAlignment.MiddleLeft;
-            cardLayout.Controls.Add(prompt, 0, 0);
+            inputLayout.Controls.Add(prompt, 0, 0);
 
             _currentLabel = new Label();
             _currentLabel.AutoSize = false;
             _currentLabel.BorderStyle = BorderStyle.FixedSingle;
             _currentLabel.Dock = DockStyle.Fill;
-            _currentLabel.BackColor = Color.FromArgb(248, 250, 252);
+            _currentLabel.BackColor = CardBackColor;
             _currentLabel.Padding = new Padding(14, 0, 14, 0);
             _currentLabel.TextAlign = ContentAlignment.MiddleLeft;
             _currentLabel.ForeColor = TextColor;
-            _currentLabel.Font = new Font("Malgun Gothic", 12.0f, FontStyle.Bold);
-            _currentLabel.Text = current == null ? "입력 대기 중..." : current.ToDisplayString();
-            cardLayout.Controls.Add(_currentLabel, 0, 1);
+            _currentLabel.Font = new Font("Segoe UI", 12.0f, FontStyle.Bold);
+            _currentLabel.Text = current == null ? "Waiting for input..." : current.ToDisplayString();
+            inputLayout.Controls.Add(_currentLabel, 0, 1);
 
             Label hint = new Label();
-            hint.Text = "Ctrl, Alt, Shift, Win 조합을 지원합니다. 마우스 가운데 버튼, XButton1, XButton2도 사용할 수 있습니다. Esc를 누르면 취소합니다.";
+            hint.Text = "Supports Ctrl, Alt, Shift, Win, middle mouse, XButton1, and XButton2. Esc cancels.";
             hint.Dock = DockStyle.Fill;
-            hint.Font = new Font("Malgun Gothic", 8.2f, FontStyle.Regular);
+            hint.Font = new Font("Segoe UI", 8.4f, FontStyle.Regular);
             hint.ForeColor = MutedTextColor;
             hint.TextAlign = ContentAlignment.MiddleLeft;
             hint.AutoEllipsis = true;
-            cardLayout.Controls.Add(hint, 0, 2);
+            inputLayout.Controls.Add(hint, 0, 2);
 
             FlowLayoutPanel buttons = new FlowLayoutPanel();
             buttons.Dock = DockStyle.Right;
             buttons.FlowDirection = FlowDirection.RightToLeft;
             buttons.WrapContents = false;
             buttons.AutoSize = true;
-            buttons.Padding = new Padding(0, 12, 0, 0);
+            buttons.Padding = new Padding(0, 6, 0, 0);
             root.Controls.Add(buttons, 0, 2);
 
-            Button cancel = CreateSecondaryButton("취소");
+            Button cancel = CreateSecondaryButton("Cancel");
             cancel.Click += delegate
             {
                 DialogResult = DialogResult.Cancel;
@@ -182,7 +173,7 @@ namespace MicMute
             button.FlatAppearance.MouseDownBackColor = Color.FromArgb(239, 243, 248);
             button.BackColor = Color.White;
             button.ForeColor = TextColor;
-            button.Font = new Font("Malgun Gothic", 9.0f, FontStyle.Bold);
+            button.Font = new Font("Segoe UI", 9.0f, FontStyle.Bold);
             button.UseVisualStyleBackColor = false;
             return button;
         }
@@ -329,7 +320,7 @@ namespace MicMute
 
             if (text.Length == 0)
             {
-                text = "입력 대기 중...";
+                text = "Waiting for input...";
             }
             else
             {
@@ -432,44 +423,6 @@ namespace MicMute
             public uint flags;
             public uint time;
             public IntPtr dwExtraInfo;
-        }
-
-        private sealed class RoundedPanel : Panel
-        {
-            public int Radius { get; set; }
-            public Color BorderColor { get; set; }
-
-            public RoundedPanel()
-            {
-                Radius = 10;
-                BorderColor = Color.FromArgb(224, 229, 237);
-                SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
-            }
-
-            protected override void OnPaint(PaintEventArgs e)
-            {
-                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                Rectangle bounds = new Rectangle(0, 0, Width - 1, Height - 1);
-                using (GraphicsPath path = CreateRoundedPath(bounds, Radius))
-                using (SolidBrush brush = new SolidBrush(BackColor))
-                using (Pen pen = new Pen(BorderColor))
-                {
-                    e.Graphics.FillPath(brush, path);
-                    e.Graphics.DrawPath(pen, path);
-                }
-            }
-
-            private static GraphicsPath CreateRoundedPath(Rectangle bounds, int radius)
-            {
-                int diameter = radius * 2;
-                GraphicsPath path = new GraphicsPath();
-                path.AddArc(bounds.Left, bounds.Top, diameter, diameter, 180, 90);
-                path.AddArc(bounds.Right - diameter, bounds.Top, diameter, diameter, 270, 90);
-                path.AddArc(bounds.Right - diameter, bounds.Bottom - diameter, diameter, diameter, 0, 90);
-                path.AddArc(bounds.Left, bounds.Bottom - diameter, diameter, diameter, 90, 90);
-                path.CloseFigure();
-                return path;
-            }
         }
 
         [DllImport("user32.dll", SetLastError = true)]

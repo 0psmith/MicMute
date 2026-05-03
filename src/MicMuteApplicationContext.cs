@@ -41,9 +41,9 @@ namespace MicMute
             _mutedIcon = TrayIconFactory.Create(true);
             _unmutedIcon = TrayIconFactory.Create(false);
 
-            _toggleItem = new ToolStripMenuItem("마이크 음소거 전환", null, delegate { ToggleMute(); });
-            _settingsItem = new ToolStripMenuItem("설정", null, delegate { ShowSettings(); });
-            _exitItem = new ToolStripMenuItem("종료", null, delegate { ExitApplication(); });
+            _toggleItem = new ToolStripMenuItem("Toggle microphone mute", null, delegate { ToggleMute(); });
+            _settingsItem = new ToolStripMenuItem("Preferences", null, delegate { ShowSettings(); });
+            _exitItem = new ToolStripMenuItem("Exit", null, delegate { ExitApplication(); });
 
             ContextMenuStrip menu = new ContextMenuStrip();
             menu.Items.Add(_toggleItem);
@@ -67,7 +67,7 @@ namespace MicMute
             HotkeyRegistrationResult hotkeyResult = _hotkeys.Register(_settings.Hotkey);
             if (!hotkeyResult.Success)
             {
-                ShowBalloon("단축키 등록 실패", hotkeyResult.ErrorMessage + Environment.NewLine + "설정에서 다른 단축키를 기록하세요.", ToolTipIcon.Warning);
+                ShowBalloon("Hotkey registration failed", hotkeyResult.ErrorMessage + Environment.NewLine + "Record another hotkey in Preferences.", ToolTipIcon.Warning);
             }
 
             _pollTimer = new Timer();
@@ -93,7 +93,7 @@ namespace MicMute
             }
             catch (Exception ex)
             {
-                ShowBalloon("마이크를 사용할 수 없습니다", ex.Message, ToolTipIcon.Warning);
+                ShowBalloon("Microphone unavailable", ex.Message, ToolTipIcon.Warning);
             }
         }
 
@@ -129,7 +129,7 @@ namespace MicMute
                 if (!_reportedAudioError)
                 {
                     _reportedAudioError = true;
-                    ShowBalloon("마이크를 사용할 수 없습니다", ex.Message, ToolTipIcon.Warning);
+                    ShowBalloon("Microphone unavailable", ex.Message, ToolTipIcon.Warning);
                 }
             }
         }
@@ -149,18 +149,18 @@ namespace MicMute
         private void UpdateTray()
         {
             _notifyIcon.Icon = _lastMuted ? _mutedIcon : _unmutedIcon;
-            _toggleItem.Text = _lastMuted ? "마이크 음소거 해제" : "마이크 음소거";
+            _toggleItem.Text = _lastMuted ? "Unmute microphone" : "Mute microphone";
 
-            string state = _lastMuted ? "음소거" : "사용 중";
-            string device = string.IsNullOrEmpty(_audio.CurrentDeviceName) ? "기본 마이크" : _audio.CurrentDeviceName;
+            string state = _lastMuted ? "Muted" : "Live";
+            string device = string.IsNullOrEmpty(_audio.CurrentDeviceName) ? "Default microphone" : _audio.CurrentDeviceName;
             SetNotifyText("MicMute - " + state + " - " + device);
         }
 
         private void UpdateTrayNoDevice()
         {
             _notifyIcon.Icon = _unmutedIcon;
-            _toggleItem.Text = "마이크 음소거 전환";
-            SetNotifyText("MicMute - 활성 마이크 없음");
+            _toggleItem.Text = "Toggle microphone mute";
+            SetNotifyText("MicMute - No active microphone");
         }
 
         private void SetNotifyText(string text)
@@ -223,7 +223,7 @@ namespace MicMute
         {
             if (candidate == null)
             {
-                return "설정이 비어 있습니다.";
+                return "Settings are empty.";
             }
 
             AppSettings previous = _settings.Clone();

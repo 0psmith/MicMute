@@ -59,7 +59,7 @@ namespace MicMute
 
             if (gesture == null || !gesture.IsValid())
             {
-                return HotkeyRegistrationResult.Error("사용할 단축키를 기록하세요.");
+                return HotkeyRegistrationResult.Error("Record a hotkey to use.");
             }
 
             _gesture = gesture.Clone();
@@ -88,7 +88,7 @@ namespace MicMute
                 {
                     int error = Marshal.GetLastWin32Error();
                     _gesture = null;
-                    return HotkeyRegistrationResult.Error("단축키를 등록할 수 없습니다: " + gesture.ToDisplayString() + Environment.NewLine + new Win32Exception(error).Message);
+                    return HotkeyRegistrationResult.Error("Could not register hotkey: " + gesture.ToDisplayString() + Environment.NewLine + new Win32Exception(error).Message);
                 }
 
                 _keyboardRegistered = true;
@@ -100,7 +100,7 @@ namespace MicMute
             {
                 int error = Marshal.GetLastWin32Error();
                 _gesture = null;
-                return HotkeyRegistrationResult.Error("단축키를 등록할 수 없습니다: " + gesture.ToDisplayString() + Environment.NewLine + new Win32Exception(error).Message);
+                return HotkeyRegistrationResult.Error("Could not register hotkey: " + gesture.ToDisplayString() + Environment.NewLine + new Win32Exception(error).Message);
             }
 
             return HotkeyRegistrationResult.Ok();
