@@ -31,6 +31,10 @@ namespace MicMute
         private IntPtr _mouseHook;
         private Label _currentLabel;
         private bool _closingFromCapture;
+        private bool _controlDown;
+        private bool _altDown;
+        private bool _shiftDown;
+        private bool _winDown;
 
         public HotkeyGesture CapturedGesture { get; private set; }
 
@@ -180,6 +184,8 @@ namespace MicMute
 
         private void InstallHooks()
         {
+            SyncModifierState();
+
             if (_keyboardHook == IntPtr.Zero)
             {
                 _keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, _keyboardProc, GetModuleHandle(null), 0);
@@ -230,6 +236,7 @@ namespace MicMute
 
                         if (IsModifierOnlyKey(key))
                         {
+                            UpdateModifierState(key, true);
                             UpdateModifierPreview();
                             return new IntPtr(1);
                         }
@@ -244,6 +251,11 @@ namespace MicMute
                             CompleteCapture(gesture);
                             return new IntPtr(1);
                         }
+                    }
+                    else if (IsModifierOnlyKey(key))
+                    {
+                        UpdateModifierState(key, false);
+                        UpdateModifierPreview();
                     }
 
                     return new IntPtr(1);
@@ -334,19 +346,44 @@ namespace MicMute
         {
             return new HotkeyGesture
             {
-                Control = ModifierDown(Keys.ControlKey, Keys.LControlKey, Keys.RControlKey),
-                Alt = ModifierDown(Keys.Menu, Keys.LMenu, Keys.RMenu),
-                Shift = ModifierDown(Keys.ShiftKey, Keys.LShiftKey, Keys.RShiftKey),
-                Win = ModifierDown(Keys.LWin, Keys.RWin)
+                Control = _controlDown,
+                Alt = _altDown,
+                Shift = _shiftDown,
+                Win = _winDown
             };
         }
 
-        private static bool AnyModifierDown()
+        private bool AnyModifierDown()
         {
-            return ModifierDown(Keys.ControlKey, Keys.LControlKey, Keys.RControlKey) ||
-                   ModifierDown(Keys.Menu, Keys.LMenu, Keys.RMenu) ||
-                   ModifierDown(Keys.ShiftKey, Keys.LShiftKey, Keys.RShiftKey) ||
-                   ModifierDown(Keys.LWin, Keys.RWin);
+            return _controlDown || _altDown || _shiftDown || _winDown;
+        }
+
+        private void SyncModifierState()
+        {
+            _controlDown = ModifierDown(Keys.ControlKey, Keys.LControlKey, Keys.RControlKey);
+            _altDown = ModifierDown(Keys.Menu, Keys.LMenu, Keys.RMenu);
+            _shiftDown = ModifierDown(Keys.ShiftKey, Keys.LShiftKey, Keys.RShiftKey);
+            _winDown = ModifierDown(Keys.LWin, Keys.RWin);
+        }
+
+        private void UpdateModifierState(Keys key, bool down)
+        {
+            if (key == Keys.ControlKey || key == Keys.LControlKey || key == Keys.RControlKey || key == Keys.Control)
+            {
+                _controlDown = down;
+            }
+            else if (key == Keys.Menu || key == Keys.LMenu || key == Keys.RMenu || key == Keys.Alt)
+            {
+                _altDown = down;
+            }
+            else if (key == Keys.ShiftKey || key == Keys.LShiftKey || key == Keys.RShiftKey || key == Keys.Shift)
+            {
+                _shiftDown = down;
+            }
+            else if (key == Keys.LWin || key == Keys.RWin)
+            {
+                _winDown = down;
+            }
         }
 
         private static bool ModifierDown(params Keys[] keys)
